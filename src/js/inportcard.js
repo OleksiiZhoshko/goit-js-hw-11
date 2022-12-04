@@ -1,15 +1,16 @@
 import { fetchFoto } from './fetchfoto';
 import { refs } from "./refs";
 import { simpleGallery } from './simpleLightbox'
-import {successMessage,failureMessage,infoSearchMessage,} from './notifix';
+import {successMessage,failureMessage,infoSearchMessage,infoMessage} from './notifix';
 
 refs.inputValueEl.addEventListener('submit', searchValue);
 let searchQuery = '';
 let totalHits = '';
 
 
-function searchValue(event) {
+async function searchValue(event) {
   event.preventDefault()
+  pageNumber = 1;
   searchQuery = event.currentTarget.searchQuery.value.trim();
   refs.galleryEl.innerHTML = '';
   event.currentTarget.reset();
@@ -20,7 +21,7 @@ function searchValue(event) {
     return;
   }
 
-  fetchFoto(searchQuery)
+  await fetchFoto(searchQuery, pageNumber)
     .then(gallery => {
       totalHits = gallery.data.totalHits;
 
@@ -29,6 +30,7 @@ function searchValue(event) {
       }
       successMessage(totalHits);
       markup(gallery.data.hits);
+      simpleGallery.refresh();
     })
     .catch(error => console.log(error));
 }
@@ -80,8 +82,4 @@ refs.seachBatton.addEventListener("click", toggleModal);
 
   function toggleModal() {
     refs.loadMore.classList.toggle("visually-hidden");
-}
-  
-function addMarkup(arr) {
-  refs.galleryEl.insertAdjacentHTML('beforeend', galleryMarkup(arr));
 }
