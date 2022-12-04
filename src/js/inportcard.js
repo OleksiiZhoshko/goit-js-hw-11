@@ -5,6 +5,7 @@ import {successMessage,failureMessage,infoSearchMessage,} from './notifix';
 
 refs.inputValueEl.addEventListener('submit', searchValue);
 let searchQuery = '';
+let totalHits = '';
 
 
 function searchValue(event) {
