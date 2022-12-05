@@ -6,7 +6,7 @@ import {successMessage,failureMessage,infoSearchMessage,infoMessage} from './not
 refs.inputValueEl.addEventListener('submit', searchValue);
 let searchQuery = '';
 let totalHits = '';
-
+let pageNumber = 1;
 
 async function searchValue(event) {
   event.preventDefault()

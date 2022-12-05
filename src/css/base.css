@@ -1,3 +1,9 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -10,4 +16,31 @@
     clip-path: inset(100%);
     clip: rect(0 0 0 0);
     overflow: hidden;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    background-color: aqua;
+    padding: 20px;
+}
+
+.input {
+    background-color:plum;
+    border-radius: 10px;
+    border: 3px;
+    border-color: brown;
+    padding: 10px 70px;
+}
+
+.seach-batton {
+    border-radius: 10px;
+
+    
+}
+
+.load-more{
+    background-color: chartreuse;
+    padding: 10px;
+font-size: 25px;
 }
