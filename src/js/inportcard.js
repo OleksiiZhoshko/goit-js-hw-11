@@ -30,7 +30,7 @@ async function searchValue(event) {
       }
       successMessage(totalHits);
       markup(gallery.data.hits);
-      simpleGallery.refresh();
+      // simpleGallery.refresh();
     })
     .catch(error => console.log(error));
 }
@@ -91,7 +91,7 @@ async function loading() {
   await fetchFoto(searchQuery, pageNumber)
     .then(gallery => {
           markup(gallery.data.hits);
-          simpleGallery.refresh();
+          // simpleGallery.refresh();
 
         })
         .catch(error => {
