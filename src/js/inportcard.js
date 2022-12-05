@@ -96,6 +96,7 @@ async function loading() {
         })
         .catch(error => {
           console.log(error);
+          refs.loadMore.classList.add("visually-hidden");
+          infoMessage()
         });
-
 }
