@@ -35,8 +35,8 @@ async function searchValue(event) {
     .catch(error => console.log(error));
 }
 
-function markup(arr) {
-  refs.galleryEl.insertAdjacentHTML('beforeend', galleryMarkup(arr));
+function markup(arrey) {
+  refs.galleryEl.insertAdjacentHTML('beforeend', galleryMarkup(arrey));
 }
 
 export function galleryMarkup(arrey) {
@@ -81,5 +81,21 @@ export function galleryMarkup(arrey) {
 refs.seachBatton.addEventListener("click", toggleModal);
 
   function toggleModal() {
-    refs.loadMore.classList.toggle("visually-hidden");
+    refs.loadMore.classList.remove("visually-hidden");
+}
+
+refs.loadMore.addEventListener('click', loading)
+
+async function loading() {
+  pageNumber += 1
+  await fetchFoto(searchQuery, pageNumber)
+    .then(gallery => {
+          markup(gallery.data.hits);
+          simpleGallery.refresh();
+
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
 }
