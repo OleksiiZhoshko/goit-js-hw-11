@@ -10,7 +10,8 @@ export async function fetchFoto(inputValue, pageNumber = 1) {
       return response
         }
     catch (error) {
-    console.log(error);
+      console.log(error);
+      refs.loadMore.classList.add("visually-hidden");
   }
   console.log(response)  
 }
