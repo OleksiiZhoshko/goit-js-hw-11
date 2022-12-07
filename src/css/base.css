@@ -3,6 +3,7 @@ body{
     flex-direction: column;
     justify-content: center;
     margin: 0;
+    background-color: black;
 }
 .visually-hidden {
     position: absolute;
@@ -46,6 +47,7 @@ font-size: 25px;
 }
 
 .gallery {
+    
     list-style: none;
 
     display: flex;
@@ -56,11 +58,22 @@ font-size: 25px;
     margin-top: 20px;
 }
 
-.photo-card {
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+.link{
+text-decoration: none;
+font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: calc(48 / 30);
+    letter-spacing: 0.03em;
+    color: black;
 }
 
+/* .photo-card {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+} */
+
 .gallery__image {
+    border-radius: 25px;
     width: 400px;
     height: 200px;
     object-fit: cover;
@@ -75,4 +88,9 @@ font-size: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.bg-color{
+    border-radius: 25px;
+    padding: 20px;
+    background-color:slategrey;
 }

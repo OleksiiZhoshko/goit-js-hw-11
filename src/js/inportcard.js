@@ -57,7 +57,7 @@ export function galleryMarkup(arrey) {
         comments,
         downloads,
       }) => {
-        return `<a href="${largeImageURL}" onclick="return false">
+        return `<div class="bg-color"><a href="${largeImageURL}" class="link" onclick="return false">
                   <div class="photo-card">
                     <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
                     </div>
@@ -78,7 +78,7 @@ export function galleryMarkup(arrey) {
                           <b>Downloads</b>
                           ${downloads}
                       </p>
-                  </div></a>`
+                  </div></a></div>`
       }
     )
     .join('');
