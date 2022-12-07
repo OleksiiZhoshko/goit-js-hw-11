@@ -57,7 +57,7 @@ export function galleryMarkup(arrey) {
         comments,
         downloads,
       }) => {
-        return `<a href="${largeImageURL}">
+        return `<a href="${largeImageURL}" onclick="return false">
                   <div class="photo-card">
                     <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
                     </div>
