@@ -21,16 +21,22 @@ async function searchValue(event) {
     return;
   }
 
+  // if (searchQuery) {
+  //   toggleModal()
+  // }
+
   await fetchFoto(searchQuery, pageNumber)
     .then(gallery => {
       totalHits = gallery.data.totalHits;
-
+ if (totalHits>1) {
+    toggleModal()
+  }
       if (!totalHits) {
         return failureMessage();
       }
       successMessage(totalHits);
       markup(gallery.data.hits);
-      // simpleGallery.refresh();
+      simpleGallery.refresh();
     })
     .catch(error => console.log(error));
 }
@@ -53,7 +59,7 @@ export function galleryMarkup(arrey) {
       }) => {
         return `<a href="${largeImageURL}">
                   <div class="photo-card">
-                    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
                     </div>
                     <div class="info">
                       <p class="info-item">
@@ -78,7 +84,7 @@ export function galleryMarkup(arrey) {
     .join('');
 }
 
-refs.seachBatton.addEventListener("click", toggleModal);
+// refs.seachBatton.addEventListener("click", toggleModal);
 
   function toggleModal() {
     refs.loadMore.classList.remove("visually-hidden");
@@ -91,7 +97,7 @@ async function loading() {
   await fetchFoto(searchQuery, pageNumber)
     .then(gallery => {
           markup(gallery.data.hits);
-          // simpleGallery.refresh();
+          simpleGallery.refresh();
 
         })
         .catch(error => {

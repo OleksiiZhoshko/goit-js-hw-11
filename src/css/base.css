@@ -44,3 +44,35 @@ body{
     padding: 10px;
 font-size: 25px;
 }
+
+.gallery {
+    list-style: none;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+
+    margin-top: 20px;
+}
+
+.photo-card {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.gallery__image {
+    width: 400px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.info {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
