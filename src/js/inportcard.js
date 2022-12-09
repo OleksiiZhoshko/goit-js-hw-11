@@ -5,45 +5,84 @@ import {successMessage,failureMessage,infoSearchMessage,infoMessage} from './not
 
 refs.inputValueEl.addEventListener('submit', searchValue);
 let searchQuery = '';
-let totalHits = '';
+// let totalHits = '';
 let pageNumber = 1;
 
-async function searchValue(event) {
-  event.preventDefault()
-  pageNumber = 1;
-  searchQuery = event.currentTarget.searchQuery.value.trim();
-  refs.galleryEl.innerHTML = '';
-  event.currentTarget.reset();
+// async function searchValue(event) {
+//   event.preventDefault()
+//   pageNumber = 1;
+//   searchQuery = event.currentTarget.searchQuery.value.trim();
+//   refs.galleryEl.innerHTML = '';
+//   event.currentTarget.reset();
 
-   if (!searchQuery) {
-    refs.galleryEl.innerHTML = '';
+//    if (!searchQuery) {
+//     refs.galleryEl.innerHTML = '';
+//     infoSearchMessage();
+//     return;
+//   }
+
+//   // if (searchQuery) {
+//   //   toggleModal()
+//   // }
+
+//   await fetchFoto(searchQuery, pageNumber)
+//     .then(gallery => {
+//       totalHits = gallery.data.totalHits;
+//  if (totalHits>1) {
+//     toggleModal()
+//   }
+//       if (!totalHits) {
+//         return failureMessage();
+//       }
+//       successMessage(totalHits);
+//       markup(gallery.data.hits);
+//       simpleGallery.refresh();
+//     })
+//     .catch(error => console.log(error));
+// }
+
+async function searchValue(evt) {
+  evt.preventDefault();
+  // loadMoreBtnEl.classList.add('is-hidden');
+  // observer.unobserve(loadMoreEl);
+  refs.galleryEl.innerHTML = '';
+  pageNumber = 1;
+  searchQuery = evt.currentTarget.searchQuery.value.trim();
+  if (!searchQuery) {
     infoSearchMessage();
     return;
   }
 
-  // if (searchQuery) {
-  //   toggleModal()
-  // }
+  const {
+    data: { totalHits, hits, total }
+  } = await fetchFoto(searchQuery, pageNumber);
 
-  await fetchFoto(searchQuery, pageNumber)
-    .then(gallery => {
-      totalHits = gallery.data.totalHits;
- if (totalHits>1) {
+  if (totalHits>1) {
     toggleModal()
   }
-      if (!totalHits) {
-        return failureMessage();
-      }
-      successMessage(totalHits);
-      markup(gallery.data.hits);
-      // simpleGallery.refresh();
-    })
-    .catch(error => console.log(error));
+
+  if (!total) {
+   refs.galleryEl.innerHTML = '';
+    failureMessage();
+    return;
+  } else {
+    successMessage(totalHits);
+    try {
+            markup(hits);
+      simpleGallery.refresh();
+    } catch (error) {
+      console.log(error);
+      failureMessage();
+    }
+    return searchQuery;
+  }
 }
 
 function markup(arrey) {
   refs.galleryEl.insertAdjacentHTML('beforeend', galleryMarkup(arrey));
 }
+
+// onclick="return false"
 
 export function galleryMarkup(arrey) {
   return arrey
@@ -57,7 +96,7 @@ export function galleryMarkup(arrey) {
         comments,
         downloads,
       }) => {
-        return `<div class="bg-color"><a href="${largeImageURL}" class="link" onclick="return false">
+        return `<div class="bg-color"><a href="${largeImageURL}" class="link">
                   <div class="photo-card">
                     <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
                     </div>
@@ -94,15 +133,27 @@ refs.loadMore.addEventListener('click', loading)
 
 async function loading() {
   pageNumber += 1
-  await fetchFoto(searchQuery, pageNumber)
-    .then(gallery => {
-          markup(gallery.data.hits);
-          // simpleGallery.refresh();
+  // await fetchFoto(searchQuery, pageNumber)
+  //   .then(gallery => {
+  //         markup(gallery.data.hits);
+  //         simpleGallery.refresh();
 
-        })
-        .catch(error => {
-          console.log(error);
-          refs.loadMore.classList.add("visually-hidden");
+  //       })
+  //       .catch(error => {
+  //         console.log(error);
+  //         refs.loadMore.classList.add("visually-hidden");
+  //         infoMessage()
+  //       });
+  const {
+    data: { totalHits, hits, total }
+  } = await fetchFoto(searchQuery, pageNumber);
+    try {
+            markup(hits);
+      simpleGallery.refresh();
+    } catch (error) {
+      console.log(error);
+      refs.loadMore.classList.add("visually-hidden");
           infoMessage()
-        });
-}
+    }
+    return searchQuery;
+  }
