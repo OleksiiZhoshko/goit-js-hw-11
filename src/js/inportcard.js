@@ -1,11 +1,17 @@
 import { fetchFoto } from './fetchfoto';
-import { refs } from "./refs";
-import { simpleGallery } from './simpleLightbox'
-import {successMessage,failureMessage,infoSearchMessage,infoMessage} from './notifix';
+import { refs } from './refs';
+import { simpleGallery } from './simpleLightbox';
+import {
+  successMessage,
+  failureMessage,
+  infoSearchMessage,
+  infoMessage,
+} from './notifix';
 
 refs.inputValueEl.addEventListener('submit', searchValue);
 let searchQuery = '';
-// let totalHits = '';
+let maxTotalHits = '';
+let maxTotal = 40;
 let pageNumber = 1;
 
 // async function searchValue(event) {
@@ -48,27 +54,30 @@ async function searchValue(evt) {
   refs.galleryEl.innerHTML = '';
   pageNumber = 1;
   searchQuery = evt.currentTarget.searchQuery.value.trim();
+  evt.currentTarget.reset();
   if (!searchQuery) {
     infoSearchMessage();
     return;
   }
 
   const {
-    data: { totalHits, hits, total }
+    data: { totalHits, hits, total },
   } = await fetchFoto(searchQuery, pageNumber);
-
-  if (totalHits>1) {
-    toggleModal()
+  if (total) {
+    toggleModal();
+  } else if (!total) {
+    refs.loadMore.classList.add('visually-hidden');
   }
 
   if (!total) {
-   refs.galleryEl.innerHTML = '';
+    refs.galleryEl.innerHTML = '';
     failureMessage();
     return;
   } else {
+    maxTotalHits = totalHits;
     successMessage(totalHits);
     try {
-            markup(hits);
+      markup(hits);
       simpleGallery.refresh();
     } catch (error) {
       console.log(error);
@@ -117,7 +126,7 @@ export function galleryMarkup(arrey) {
                           <b>Downloads</b>
                           ${downloads}
                       </p>
-                  </div></a></div>`
+                  </div></a></div>`;
       }
     )
     .join('');
@@ -125,14 +134,19 @@ export function galleryMarkup(arrey) {
 
 // refs.seachBatton.addEventListener("click", toggleModal);
 
-  function toggleModal() {
-    refs.loadMore.classList.remove("visually-hidden");
+function toggleModal() {
+  refs.loadMore.classList.remove('visually-hidden');
 }
 
-refs.loadMore.addEventListener('click', loading)
+refs.loadMore.addEventListener('click', loading);
 
 async function loading() {
-  pageNumber += 1
+  pageNumber += 1;
+  if (maxTotal >= maxTotalHits) {
+    refs.loadMore.classList.add("visually-hidden");
+      infoMessage()
+    return
+  }
   // await fetchFoto(searchQuery, pageNumber)
   //   .then(gallery => {
   //         markup(gallery.data.hits);
@@ -145,15 +159,18 @@ async function loading() {
   //         infoMessage()
   //       });
   const {
-    data: { totalHits, hits, total }
+    data: { hits },
   } = await fetchFoto(searchQuery, pageNumber);
+  if (!hits) {
+    throw new Error();
+  } else {
+    maxTotal += hits.length;
     try {
-            markup(hits);
+      markup(hits);
       simpleGallery.refresh();
     } catch (error) {
       console.log(error);
-      refs.loadMore.classList.add("visually-hidden");
-          infoMessage()
     }
     return searchQuery;
   }
+}
